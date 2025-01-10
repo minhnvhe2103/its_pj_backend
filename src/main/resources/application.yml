@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@//localhost:1521/orclpdb
+    username: common
+    password: common
+    driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      pool-name: HikariCP
+      maximum-pool-size: 10
+    jpa:
+      hibernate:
+        ddl-auto: none
+        show-sql: true
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.Oracle12cDialect
