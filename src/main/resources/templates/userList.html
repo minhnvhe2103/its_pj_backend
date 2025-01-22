@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>User List</title>
+</head>
+
+<body>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #444;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f4f4f4;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #ccc;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .addbutton {
+            background-color: paleturquoise;
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .popup-content label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .popup-content input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .popup-content input:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        }
+
+        .popup-content button[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .popup-content button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .edit-btn {
+            background-color: #FBC116;
+        }
+
+        .edit-btn:hover {
+            background-color: #45a049;
+        }
+
+        .delete-btn {
+            background-color: #f44336;
+        }
+
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .btn.add-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn.add-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .pagination-settings {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .pagination-settings label {
+            font-weight: bold;
+        }
+
+        .pagination-settings select {
+            padding: 5px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .pagination-settings select:hover {
+            border-color: #007bff;
+        }
+
+        .btn-link {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .pagination {
+            list-style: none;
+            display: flex;
+            padding: 0;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination li a {
+            text-decoration: none;
+            padding: 10px 15px;
+            color: #007bff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .pagination li a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .pagination li.active a {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .pagination li.disabled a {
+            color: #ccc;
+            pointer-events: none;
+        }
+    </style>
+
+    <h1>Danh sách người dùng</h1>
+    <div class="container">
+        <div class="pagination-container">
+
+            <a class="btn add-btn" th:href="@{/users1/create}">Thêm mới người dùng</a>
+            <div class="pagination-settings">
+                <form th:action="@{/users1}" method="get">
+                    <label for="size">Số bản ghi mỗi trang:</label>
+                    <select id="size" name="size" onchange="this.form.submit()">
+                        <option th:value="5" th:selected="${size == 5}">5</option>
+                        <option th:value="10" th:selected="${size == 10}">10</option>
+                        <option th:value="20" th:selected="${size == 20}">20</option>
+                        <option th:value="50" th:selected="${size == 50}">50</option>
+                    </select>
+                    <input type="hidden" name="page" th:value="${currentPage}" />
+                    <input type="hidden" name="sortBy" th:value="${sortBy}" />
+                    <input type="hidden" name="direction" th:value="${direction}" />
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container">
+
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên</th>
+                    <th>Email</th>
+                    <th>Số diện thoại </th>
+                    <th>Phòng ban</th>
+                    <th>Trang thái</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td><a class="btn btn-link" th:href="@{/users1/detail/{id}(id=${user.userId})}"
+                            th:text="${user.userId}"></a></td>
+                    <td th:text="${user.firstName + ' ' + user.lastName}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.phoneNumber}"></td>
+                    <td th:text="${user.departmentId}"></td>
+                    <td th:text="${user.status}"></td>
+                    <td>
+                        <a class="btn edit-btn" th:href="@{/users1/edit/{id}(id=${user.userId})}">Chỉnh sửa</a>
+                        <form th:action="@{/users1/delete/{id}(id=${user.userId})}" method="post"
+                            style="display:inline;">
+                            <button type="submit" class="btn delete-btn">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="pagination-container">
+        <ul class="pagination">
+            <li th:classappend="${currentPage == 0} ? 'disabled'">
+                <a
+                    th:href="@{/users1(page=${currentPage - 1}, size=${size}, sortBy=${sortBy}, direction=${direction})}">
+                    &laquo; Trang trước
+                </a>
+            </li>
+
+            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
+                <a th:href="@{/users1(page=${i}, size=${size}, sortBy=${sortBy}, direction=${direction})}"
+                    th:text="${i + 1}">
+                </a>
+            </li>
+
+            <li th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a
+                    th:href="@{/users1(page=${currentPage + 1}, size=${size}, sortBy=${sortBy}, direction=${direction})}">
+                    Trang sau &raquo;
+                </a>
+            </li>
+        </ul>
+    </div>
+
+</body>
+
+
+</html>

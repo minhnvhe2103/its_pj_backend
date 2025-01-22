@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Sửa Người Dùng</title>
+</head>
+
+<body>
+
+    <style>
+        form {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+        input[type="email"],
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        input[type="email"]:focus,
+        input[type="text"]:focus {
+            border-color: #4d90fe;
+            outline: none;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        div[th\:if] {
+            color: red;
+            font-size: 12px;
+            margin-top: -8px;
+            margin-bottom: 12px;
+        }
+
+        div[th\:if] th\:errors {
+            display: block;
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+
+    <h1>Sửa Người Dùng</h1>
+    <form th:action="@{/users1/edit/{id}(id=${idUser})}" th:method="post" th:object="${userDTO}">
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" th:field="*{email}" />
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+        <label for="phoneNumber">Số điện thoại:</label>
+        <input type="text" id="phoneNumber" th:field="*{phoneNumber}" />
+        <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+
+        <label for="firstName">Họ:</label>
+        <input type="text" id="firstName" th:field="*{firstName}" />
+        <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+
+        <label for="lastName">Tên:</label>
+        <input type="text" id="lastName" th:field="*{lastName}" />
+        <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+
+        <button type="submit">Lưu</button>
+    </form>
+</body>
+
+</html>

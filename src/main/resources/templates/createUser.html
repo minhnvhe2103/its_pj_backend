@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Thêm/Sửa Người Dùng</title>
+    <style>
+        form {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus {
+            border-color: #4d90fe;
+            outline: none;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        div[th\:if] {
+            color: red;
+            font-size: 12px;
+            margin-top: -8px;
+            margin-bottom: 12px;
+        }
+
+        div[th\:if] th\:errors {
+            display: block;
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>Thêm Người Dùng</h1>
+    <form th:action="@{/users1/create}" th:method="post" th:object="${userDTO}">
+        <label>Tên người dùng:</label>
+        <input type="text" th:field="*{username}" />
+        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+
+        <label>Mật khẩu:</label>
+        <input type="password" th:field="*{password}" />
+        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" />
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+        <label>Số điện thoại:</label>
+        <input type="text" th:field="*{phoneNumber}" />
+        <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+
+        <label>Họ:</label>
+        <input type="text" th:field="*{firstName}" />
+        <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+
+        <label>Tên:</label>
+        <input type="text" th:field="*{lastName}" />
+        <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+
+        <label>Phòng ban ID:</label>
+        <input type="number" th:field="*{departmentId}" />
+        <div th:if="${#fields.hasErrors('departmentId')}" th:errors="*{departmentId}"></div>
+
+        <button type="submit">Lưu</button>
+    </form>
+</body>
+
+</html>

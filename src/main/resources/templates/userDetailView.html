@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Register</title>
+</head>
+
+<body>
+
+    <style>
+        .h1 {
+            text-align: center;
+        }
+
+        .container {
+
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        div {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        strong {
+            font-weight: bold;
+            color: #555;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        span {
+            font-weight: normal;
+            color: #666;
+            word-wrap: break-word;
+        }
+
+        .btn-back {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #45a049;
+            text-decoration: underline;
+        }
+    </style>
+
+    <div class="container">
+        <h1>Thông tin chi tiết người dùng</h1>
+        <div><strong>Tên người dùng:</strong> <span th:text="${userDTO.username}"></span></div>
+        <div><strong>Email:</strong> <span th:text="${userDTO.email}"></span></div>
+        <div><strong>Số điện thoại:</strong> <span th:text="${userDTO.phoneNumber}"></span></div>
+        <div><strong>Họ:</strong> <span th:text="${userDTO.firstName}"></span></div>
+        <div><strong>Tên:</strong> <span th:text="${userDTO.lastName}"></span></div>
+        <div><strong>Phòng ban ID:</strong> <span th:text="${userDTO.departmentId}"></span></div>
+        <div><strong>Trạng thái:</strong> <span th:text="${userDTO.status}"></span></div>
+        <div><strong>Ngày tạo:</strong> <span th:text="${userDTO.createdTime}"></span></div>
+        <div><strong>Ngày cập nhật:</strong> <span th:text="${userDTO.updatedTime}"></span></div>
+        <div class="button-container">
+            <a th:href="@{/users1(page=0, size=5, sortBy=id, direction=ASC)}" class="btn btn-back">Quay lại danh sách người dùng</a>
+        </div>
+    </div>
+
+</body>
