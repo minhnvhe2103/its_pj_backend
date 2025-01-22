@@ -41,11 +41,11 @@ public class User extends BaseEntity {
 
     @Column(name = "LAST_NAME", length = 100)
     String lastName;
-    @Column(name = "DEPARTMENT_ID", nullable = false)
-    Long departmentId;
-//    @ManyToOne
-//    @JoinColumn(name = "DEPARTMENT_ID", referencedColumnName = "DEPARTMENT_ID")
-//    Department department;
+//    @Column(name = "DEPARTMENT_ID", nullable = false)
+//    Long departmentId;
+    @ManyToOne
+    @JoinColumn(name = "DEPARTMENT_ID", referencedColumnName = "DEPARTMENT_ID")
+    Department department;
 
     @Column(name = "STATUS")
     Integer status;

@@ -4,10 +4,13 @@ import com.example.spring_mvc_demo.dto.LoginDTO;
 import com.example.spring_mvc_demo.dto.UserDTO;
 import com.example.spring_mvc_demo.dto.UserUpdateRequest;
 import com.example.spring_mvc_demo.dto.response.LoginResponse;
+import com.example.spring_mvc_demo.dto.response.UserListResponse;
 import com.example.spring_mvc_demo.dto.response.UserResponse;
 import com.example.spring_mvc_demo.helper.exception.AppException;
 import com.example.spring_mvc_demo.helper.exception.ErrorCode;
+import com.example.spring_mvc_demo.model.Department;
 import com.example.spring_mvc_demo.model.User;
+import com.example.spring_mvc_demo.repository.DepartmentRepository;
 import com.example.spring_mvc_demo.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +34,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService {
     UserRepository userRepository;
+    DepartmentRepository departmentRepository;
     PlatformTransactionManager transactionManager;
     ModelMapper modelMapper;
     SessionFactory sessionFactory;
@@ -70,7 +75,6 @@ public class UserService {
                     user.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
                     user.setFirstName(resultSet.getString("FIRST_NAME"));
                     user.setLastName(resultSet.getString("LAST_NAME"));
-                    user.setDepartmentId(resultSet.getLong("DEPARTMENT_ID"));
                     user.setStatus(resultSet.getInt("STATUS"));
                     users.add(user);
                 }
@@ -105,29 +109,60 @@ public class UserService {
             return users;
         }
     }
-//    @Transactional(readOnly = true)
-//    public List<User> getAllUserByHQL() {
-//        return userRepository.findAllUsersHQL();
-//    }
 
-    public Page<User> getAllUserHQL(int page, int size, String sortBy, String direction){
+    public Page<UserListResponse> getAllUserHQL(int page, int size, String sortBy, String direction){
         Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        return userRepository.findAllUsersHQL(pageable);
+        Page<User> usersPage = userRepository.findAllUsersHQL(pageable);
+
+        Page<UserListResponse> userListResponse = usersPage.map(user ->
+                new UserListResponse(
+                        user.getUserId(),
+                        user.getEmail(),
+                        user.getPhoneNumber(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getDepartment().getDepartmentId(),
+                        user.getStatus()
+                )
+        );
+
+        return userListResponse;
     }
 
-    
+//    public Page<User> getUsersByName(String name, int page, int size, String sortBy, String direction) {
+//        Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name())
+//                ? Sort.by(sortBy).ascending()
+//                : Sort.by(sortBy).descending();
+//        Pageable pageable = PageRequest.of(page, size, sort);
+//        return userRepository.filterByName(name, pageable);
+//    }
+
+    public List<User> filterUser(String name){
+        return userRepository.filterByName(name);
+    }
+
+    public List<UserListResponse> filterUserByName(String name) {
+        List<User> users = userRepository.filterByName(name);
+
+        return users.stream()
+                .map(user -> new UserListResponse(
+                        user.getUserId(),
+                        user.getEmail(),
+                        user.getPhoneNumber(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getDepartment().getDepartmentId(),
+                        user.getStatus()
+                ))
+                .collect(Collectors.toList());
+    }
 
     public User getUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow();
     }
-
-    public User addUser(User user) {
-        return userRepository.save(user);
-    }
-
     @Transactional
     public User addUser1(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
@@ -173,7 +208,7 @@ public class UserService {
         response.setPhoneNumber(user.getPhoneNumber());
         response.setFirstName(user.getFirstName());
         response.setLastName(user.getLastName());
-        response.setDepartmentId(user.getDepartmentId());
+        response.setDepartmentId(user.getDepartment().getDepartmentId());
         response.setStatus(user.getStatus());
         response.setCreatedTime(user.getCreatedTime());
         response.setUpdatedTime(user.getUpdatedTime());
@@ -188,14 +223,17 @@ public class UserService {
 
         User user = userRepository.findByUsername(userDTO.getUsername());
         if (user != null) {
-            throw new AppException(ErrorCode.EMAIL_OR_PHONENUMBER_EXISTED);
+            throw new AppException(ErrorCode.USER_EXISTED);
         }
 
         boolean existed = userRepository.existsByEmailAndPhoneNumber(userDTO.getEmail(), userDTO.getPhoneNumber());
         if (existed) {
             throw new AppException(ErrorCode.EMAIL_OR_PHONENUMBER_EXISTED);
         }
-
+        Department department = departmentRepository.findDepartmentById(userDTO.getDepartmentId());
+        if (department == null) {
+            throw new AppException(ErrorCode.DEPARTMENT_NOT_EXISTED);
+        }
 
         userRepository.save(User.builder()
                 .email(userDTO.getEmail())
@@ -204,7 +242,7 @@ public class UserService {
                 .lastName(userDTO.getLastName())
                 .username(userDTO.getUsername())
                 .password(userDTO.getPassword())
-                .departmentId(userDTO.getDepartmentId())
+                .department(department)
                 .status(1)
                 .createdTime(new Date())
                 .createdUser(1L)

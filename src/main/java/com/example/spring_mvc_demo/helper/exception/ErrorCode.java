@@ -15,6 +15,8 @@ public enum ErrorCode {
     USER_NOT_EXISTED(1005, "User not existed", HttpStatus.BAD_REQUEST),
     UNAUTHENTICATED(1006, "Wrong username or password", HttpStatus.BAD_REQUEST),
     EMAIL_OR_PHONENUMBER_EXISTED(1007, "Email or phone number existed", HttpStatus.BAD_REQUEST),
+    DEPARTMENT_NOT_EXISTED(2001, "Department not existed", HttpStatus.BAD_REQUEST),
+    DEPARTMENT_EXISTED(2002, "Department existed", HttpStatus.BAD_REQUEST),
     ;
     private int code;
     private String message;

@@ -46,6 +46,7 @@
         button[type="submit"] {
             width: 100%;
             padding: 12px;
+            margin: 10px 0;
             background-color: #4CAF50;
             color: white;
             border: none;
@@ -58,6 +59,34 @@
             background-color: #45a049;
         }
 
+        button[type="submit1"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        button[type="submit1"]:hover {
+            background-color: #211bce;
+        }
+
+        button[type="submit1"] a {
+            color: white;
+            text-decoration: none;
+        }
+
+
+
+
+
+
         div[th\:if] {
             color: red;
             font-size: 12px;
@@ -68,8 +97,50 @@
         div[th\:if] th\:errors {
             display: block;
         }
+
         h1 {
             text-align: center;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            font-size: 14px;
+            color: #333;
+        }
+
+        form div {
+            font-size: 12px;
+            color: red;
+        }
+
+        form select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .btn-back {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            width: 100%;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
         }
     </style>
 
@@ -102,11 +173,43 @@
         <input type="text" th:field="*{lastName}" />
         <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
 
-        <label>Phòng ban ID:</label>
-        <input type="number" th:field="*{departmentId}" />
+        <label for="departmentId">Phòng ban:</label>
+        <select th:field="*{departmentId}">
+            <option value="201" th:text="'201 - CORPORATION - Tổng công ty'">201 - CORPORATION - Tổng công ty</option>
+            <option value="202" th:text="'202 - HN_DEPARTMENT - Phòng ban tại Hà Nội'">202 - HN_DEPARTMENT - Phòng ban
+                tại Hà
+                Nội</option>
+            <option value="203" th:text="'203 - SG_DEPARTMENT - Phòng ban tại Hồ Chí Minh'">203 - SG_DEPARTMENT - Phòng
+                ban tại
+                Hồ Chí Minh</option>
+            <option value="204" th:text="'204 - DN_DEPARTMENT - Phòng ban tại Đà Nẵng'">204 - DN_DEPARTMENT - Phòng ban
+                tại Đà
+                Nẵng</option>
+            <option value="205" th:text="'205 - HP_DEPARTMENT - Phòng ban tại Hải Phòng'">205 - HP_DEPARTMENT - Phòng
+                ban tại
+                Hải Phòng</option>
+            <option value="206" th:text="'206 - BD_DEPARTMENT - Phòng ban tại Bình Dương'">206 - BD_DEPARTMENT - Phòng
+                ban tại
+                Bình Dương</option>
+            <option value="207" th:text="'207 - NA_DEPARTMENT - Phòng ban tại Nghệ An'">207 - NA_DEPARTMENT - Phòng ban
+                tại Nghệ
+                An</option>
+            <option value="208" th:text="'208 - TTH_DEPARTMENT - Phòng ban tại Thừa Thiên Huế'">208 - TTH_DEPARTMENT -
+                Phòng ban
+                tại Thừa Thiên Huế</option>
+            <option value="209" th:text="'209 - QN_DEPARTMENT - Phòng ban tại Quảng Ninh'">209 - QN_DEPARTMENT - Phòng
+                ban tại
+                Quảng Ninh</option>
+            <option value="210" th:text="'210 - BN_DEPARTMENT - Phòng ban tại Bắc Ninh'">210 - BN_DEPARTMENT - Phòng ban
+                tại Bắc
+                Ninh</option>
+            <option value="211" th:text="'211 - CT_DEPARTMENT - Phòng ban tại Cần Thơ'">211 - CT_DEPARTMENT - Phòng ban
+                tại Cần
+                Thơ</option>
+        </select>
         <div th:if="${#fields.hasErrors('departmentId')}" th:errors="*{departmentId}"></div>
-
         <button type="submit">Lưu</button>
+        <button type="submit1"><a th:href="@{/users1(page=0, size=5, sortBy=id, direction=ASC)}">Cancel</a></button>
     </form>
 </body>
 

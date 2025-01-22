@@ -27,14 +27,5 @@ public class DepartmentController {
         return "redirect:/users1";
     }
 
-    @PostMapping
-    public String createDepartment(@Valid DepartmentDTO departmentDTO,
-    BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "redirect:/users1";
-        }
-        departmentService.addDepartment(departmentDTO);
-        model.addAttribute("departments", new DepartmentDTO());
-        return "redirect:/users1";
-    }
+
 }

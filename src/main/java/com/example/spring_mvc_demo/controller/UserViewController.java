@@ -2,6 +2,7 @@ package com.example.spring_mvc_demo.controller;
 
 import com.example.spring_mvc_demo.dto.UserDTO;
 import com.example.spring_mvc_demo.dto.UserUpdateRequest;
+import com.example.spring_mvc_demo.dto.response.UserListResponse;
 import com.example.spring_mvc_demo.dto.response.UserResponse;
 import com.example.spring_mvc_demo.model.User;
 import com.example.spring_mvc_demo.service.UserService;
@@ -51,7 +52,7 @@ public class UserViewController {
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "ASC") String direction,
             Model model) {
-        Page<User> users = userService.getAllUserHQL(page, size, sortBy, direction);
+        Page<UserListResponse> users = userService.getAllUserHQL(page, size, sortBy, direction);
 
         model.addAttribute("users", users.getContent());
         model.addAttribute("currentPage", page);
@@ -62,6 +63,56 @@ public class UserViewController {
         model.addAttribute("size", size);
         return "userList";
     }
+
+//    @GetMapping("/filter")
+//    public String listUsers(@RequestParam(value = "name", required = false) String name, Model model) {
+//        List<User> users;
+//        if (name != null && !name.isEmpty()) {
+//            users = userService.filterUser(name);
+//        } else {
+//            return "redirect:/users1";
+//        }
+//        model.addAttribute("users", users);
+//        return "userList";
+//    }
+
+    @GetMapping("/filter")
+    public String listUsers(@RequestParam(value = "name", required = false) String name, Model model) {
+        List<UserListResponse> users;
+        if (name != null && !name.isEmpty()) {
+            users = userService.filterUserByName(name);
+        } else {
+            return "redirect:/users1";
+        }
+        model.addAttribute("users", users);
+        return "userList";
+    }
+
+//    @GetMapping("/users1/filter")
+//    public String filterUsers(
+//            @RequestParam String name,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size,
+//            @RequestParam(defaultValue = "userId") String sortBy,
+//            @RequestParam(defaultValue = "ASC") String direction,
+//            Model model) {
+//        Page<User> users = userService.getUsersByName(name, page, size, sortBy, direction);
+//
+//        model.addAttribute("users", users.getContent());
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("totalPages", users.getTotalPages());
+//        model.addAttribute("totalItems", users.getTotalElements());
+//        model.addAttribute("sortBy", sortBy);
+//        model.addAttribute("direction", direction);
+//        model.addAttribute("size", size);
+//        model.addAttribute("filterName", name);
+//
+//        return "userList";
+//    }
+
+
+
+
 
 
     @GetMapping("/detail/{id}")

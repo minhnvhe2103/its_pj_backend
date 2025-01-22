@@ -226,6 +226,43 @@
             color: #ccc;
             pointer-events: none;
         }
+
+
+        form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        form input[type="text"] {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 250px;
+            transition: border-color 0.3s ease;
+        }
+
+        form input[type="text"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        form button {
+            background-color: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #218838;
+        }
     </style>
 
     <h1>Danh sách người dùng</h1>
@@ -233,6 +270,12 @@
         <div class="pagination-container">
 
             <a class="btn add-btn" th:href="@{/users1/create}">Thêm mới người dùng</a>
+
+            <form th:action="@{/users1/filter}" method="get">
+                <input type="text" name="name" placeholder="Nhập tên" />
+                <button type="submit">Tìm kiếm</button>
+            </form>
+
             <div class="pagination-settings">
                 <form th:action="@{/users1}" method="get">
                     <label for="size">Số bản ghi mỗi trang:</label>
@@ -247,6 +290,8 @@
                     <input type="hidden" name="direction" th:value="${direction}" />
                 </form>
             </div>
+
+
         </div>
     </div>
 
@@ -289,6 +334,11 @@
 
 
 
+
+
+</body>
+
+<footer>
     <div class="pagination-container">
         <ul class="pagination">
             <li th:classappend="${currentPage == 0} ? 'disabled'">
@@ -312,8 +362,7 @@
             </li>
         </ul>
     </div>
-
-</body>
+</footer>
 
 
 </html>

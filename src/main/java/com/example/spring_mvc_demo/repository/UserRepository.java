@@ -25,4 +25,23 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmailAndPhoneNumber(String email, String  phoneNumber);
 
     User findUserByUserId(Long userID);
+
+    @Query(value = "SELECT * FROM USERS " +
+            "WHERE LOWER(FIRST_NAME) LIKE LOWER(CONCAT('%', :name, '%')) " +
+            "   OR LOWER(LAST_NAME) LIKE LOWER(CONCAT('%', :name, '%'))",
+            countQuery = "SELECT COUNT(*) FROM USERS " +
+                    "WHERE LOWER(FIRST_NAME) LIKE LOWER(CONCAT('%', :name, '%')) " +
+                    "   OR LOWER(LAST_NAME) LIKE LOWER(CONCAT('%', :name, '%'))",
+            nativeQuery = true)
+    Page<User> findAllUsersByName(@Param("name") String name, Pageable pageable);
+
+    @Query(value = "SELECT * FROM USERS " +
+            "WHERE LOWER(FIRST_NAME) LIKE LOWER('%' || :name || '%') " +
+            "   OR LOWER(LAST_NAME) LIKE LOWER('%' || :name || '%')",
+            nativeQuery = true)
+    List<User> filterByName(@Param("name") String name);
+
+
+
+
 }

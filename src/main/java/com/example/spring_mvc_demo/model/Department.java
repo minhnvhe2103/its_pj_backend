@@ -38,6 +38,6 @@ public class Department extends BaseEntity {
     @Column(name = "STATUS")
     private Integer status;
 
-//    @OneToMany(mappedBy = "department")
-//    private Set<User> users;
+    @OneToMany(mappedBy = "department")
+    private Set<User> users;
 }
